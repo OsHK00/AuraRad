@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using GlobalEnums;
 
 
+
 internal class Abs : MonoBehaviour
 {
 
@@ -22,70 +23,79 @@ internal class Abs : MonoBehaviour
 
     private const float HALO_CLOCK_QUARTER_TIME = 1.0f;
 
-    private const bool  HALO1_BEAT_ENABLED = true;   
-    private const float HALO1_BEAT_MIN     = 1.00f;  
-    private const float HALO1_BEAT_MAX     = 1.12f;  
-    private const float HALO1_BEAT_FREQ    = 0.85f;  
+    private const bool  HALO1_BEAT_ENABLED = true;
+    private const float HALO1_BEAT_MIN     = 1.00f;
+    private const float HALO1_BEAT_MAX     = 1.12f;
+    private const float HALO1_BEAT_FREQ    = 0.85f;
 
-
-    private const bool  HALO1_REV_ENABLED  = true;   
-    private const float HALO1_REV_SIZE     = 0.90f;  
-    private const float HALO1_REV_ALPHA    = 0.38f;  
-    private const float HALO1_REV_SPIN     = 2.6f;   // grados/frame
-
+    private const bool  HALO1_REV_ENABLED  = true;
+    private const float HALO1_REV_SIZE     = 0.90f;
+    private const float HALO1_REV_ALPHA    = 0.38f;
+    private const float HALO1_REV_SPIN     = 2.6f;
 
     private const bool  HALO_EXTRA_B_ENABLED = true;
     private const float HALO_EXTRA_B_SIZE    = 1.45f;
     private const float HALO_EXTRA_B_ALPHA   = 0.42f;
-    private const float HALO_EXTRA_B_SPIN    =  3.0f;  // horario
+    private const float HALO_EXTRA_B_SPIN    =  3.0f;
 
     private const bool  HALO_EXTRA_C_ENABLED = true;
     private const float HALO_EXTRA_C_SIZE    = 0.62f;
     private const float HALO_EXTRA_C_ALPHA   = 0.60f;
-    private const float HALO_EXTRA_C_SPIN    = -7.5f;  // rápido antihorario
+    private const float HALO_EXTRA_C_SPIN    = -7.5f;
 
- 
     private const float CLIMB_FINAL_TRANSITION_DUR = 2.2f;
 
+    private const bool  HAZE_OSC_ENABLED     = true;
+    private static readonly Color HAZE_OSC_A = new Color(0.32f, 0.20f, 0.42f, 1f);
+    private static readonly Color HAZE_OSC_B = new Color(0.18f, 0.22f, 0.35f, 1f);
+    private const float HAZE_OSC_HALF_PERIOD = 3.5f;
+    private const bool  FINAL_BG_OSC_ENABLED         = false;
+    private const float FINAL_BG_OSC_HALF_PERIOD      = 4.5f;
+    private const float FINAL_BG_OSC_HOLD_FIRE        = 1.2f;
+    private const float FINAL_BG_OSC_HOLD_BLUE        = 0.6f;
 
-    private const bool  HAZE_OSC_ENABLED     = true; 
-    private static readonly Color HAZE_OSC_A = new Color(0.32f, 0.20f, 0.42f, 1f); // violeta grisáceo
-    private static readonly Color HAZE_OSC_B = new Color(0.18f, 0.22f, 0.35f, 1f); // azul noche oscuro
-    private const float HAZE_OSC_HALF_PERIOD = 3.5f; // segundos por mitad de ciclo
+    // Color fuego (destino oscilación)
+    private static readonly Color FINAL_BG_OSC_SKY_FIRE    = new Color(0.48f, 0.12f, 0.08f, 1f);
+    private static readonly Color FINAL_BG_OSC_PILLAR_FIRE = new Color(0.34f, 0.10f, 0.07f, 1f);
+    private static readonly Color FINAL_BG_OSC_HAZE_FIRE   = new Color(0.60f, 0.18f, 0.12f, 1f);
+    private static readonly Color FINAL_BG_OSC_CLOUD_FIRE  = new Color(0.52f, 0.14f, 0.09f, 1f);
+    private static readonly Color FINAL_BG_OSC_RAY_FIRE    = new Color(0.75f, 0.28f, 0.12f, 0.45f);
+
+
+    // Color "azul/frío" del oscilador — menos saturado que P3 para no cansar la vista
+    private static readonly Color FINAL_BG_OSC_SKY_BLUE    = new Color(0.38f, 0.48f, 0.62f, 1f);
+    private static readonly Color FINAL_BG_OSC_PILLAR_BLUE = new Color(0.28f, 0.38f, 0.52f, 1f);
+    private static readonly Color FINAL_BG_OSC_HAZE_BLUE   = new Color(0.42f, 0.52f, 0.68f, 1f);
+    private static readonly Color FINAL_BG_OSC_CLOUD_BLUE  = new Color(0.36f, 0.46f, 0.60f, 1f);
+    private static readonly Color FINAL_BG_OSC_RAY_BLUE    = new Color(0.45f, 0.58f, 0.75f, 0.40f);
+
+
+    private const float HALO2_SIZE_SWORD_RAIN = 1.50f;   // cuando empieza sword rain
+    private const float HALO2_SIZE_PLATFORMS  = 4f;   // cuando empieza plataformas (arena2)
+    private const float HALO2_SIZE_FINAL      = 2.50f;   // fase final (climb → dance)
+
+    // ── HALO2 TINT OSCILLATOR (fase final) ──────────────────────────
+    // El halo2 oscila entre su color blanco/neutro y un tinte rojo en bucle.
+    private const bool  HALO2_TINT_OSC_ENABLED    = true;
+    // Color "neutro" — el que ya tiene el halo (blanco puro = sin tinte)
+    private static readonly Color HALO2_TINT_OSC_COLOR_A = new Color(1.00f, 1.00f, 1.00f, 1f);
+    // Color "rojo" al que oscila
+    private static readonly Color HALO2_TINT_OSC_COLOR_B = new Color(1.00f, 0.10f, 0.08f, 1f);
+    // Duración de medio ciclo en segundos (A→B, luego B→A, etc.)
+    private const float HALO2_TINT_OSC_HALF_PERIOD = 2.5f;
+    // Pausa en segundos al llegar al color B antes de volver (0 = sin pausa)
+    private const float HALO2_TINT_OSC_HOLD_B      = 0.4f;
+    // Pausa al llegar al color A antes de ir a B de nuevo (0 = sin pausa)
+    private const float HALO2_TINT_OSC_HOLD_A      = 0.8f;
 
 
     private const int PALETTE_ACTIVE = 0;
 
-    private static readonly Color[] P0_SKY    = {
-        new Color(0.30f, 0.50f, 0.90f, 1f),
-        new Color(1.00f, 0.50f, 0.00f, 1f),
-        new Color(0.18f, 0.03f, 0.08f, 1f),
-        new Color(0.10f, 0.06f, 0.20f, 1f)
-    };
-    private static readonly Color[] P0_PILLAR = {
-        new Color(0.20f, 0.40f, 0.80f, 1f),
-        new Color(0.80f, 0.40f, 0.00f, 1f),
-        new Color(0.12f, 0.02f, 0.05f, 1f),
-        new Color(0.07f, 0.04f, 0.14f, 1f)
-    };
-    private static readonly Color[] P0_HAZE   = {
-        new Color(0.40f, 0.60f, 0.90f, 1f),
-        new Color(1.00f, 0.60f, 0.20f, 1f),
-        new Color(0.25f, 0.04f, 0.10f, 1f),
-        new Color(0.45f, 0.20f, 0.70f, 1f)
-    };
-    private static readonly Color[] P0_CLOUD  = {
-        new Color(0.40f, 0.55f, 0.80f, 1f),
-        new Color(0.90f, 0.45f, 0.10f, 1f),
-        new Color(0.22f, 0.04f, 0.09f, 1f),
-        new Color(0.52f, 0.11f, 0.04f, 1f)
-    };
-    private static readonly Color[] P0_RAY    = {
-        new Color(0.50f, 0.70f, 1.00f, 0.40f),
-        new Color(1.00f, 0.70f, 0.30f, 0.40f),
-        new Color(0.55f, 0.10f, 0.18f, 0.35f),
-        new Color(0.80f, 0.50f, 0.10f, 0.45f)
-    };
+    private static readonly Color[] P0_SKY    = { new Color(0.30f, 0.50f, 0.90f, 1f), new Color(1.00f, 0.50f, 0.00f, 1f), new Color(0.18f, 0.03f, 0.08f, 1f), new Color(0.10f, 0.06f, 0.20f, 1f) };
+    private static readonly Color[] P0_PILLAR = { new Color(0.20f, 0.40f, 0.80f, 1f), new Color(0.80f, 0.40f, 0.00f, 1f), new Color(0.12f, 0.02f, 0.05f, 1f), new Color(0.07f, 0.04f, 0.14f, 1f) };
+    private static readonly Color[] P0_HAZE   = { new Color(0.40f, 0.60f, 0.90f, 1f), new Color(1.00f, 0.60f, 0.20f, 1f), new Color(0.25f, 0.04f, 0.10f, 1f), new Color(0.45f, 0.20f, 0.70f, 1f) };
+    private static readonly Color[] P0_CLOUD  = { new Color(0.40f, 0.55f, 0.80f, 1f), new Color(0.90f, 0.45f, 0.10f, 1f), new Color(0.22f, 0.04f, 0.09f, 1f), new Color(0.52f, 0.11f, 0.04f, 1f) };
+    private static readonly Color[] P0_RAY    = { new Color(0.50f, 0.70f, 1.00f, 0.40f), new Color(1.00f, 0.70f, 0.30f, 0.40f), new Color(0.55f, 0.10f, 0.18f, 0.35f), new Color(0.80f, 0.50f, 0.10f, 0.45f) };
 
     private static readonly Color[] P1_SKY    = { new Color(0.25f, 0.15f, 0.55f, 1f), new Color(0.50f, 0.10f, 0.70f, 1f), new Color(0.10f, 0.02f, 0.25f, 1f), new Color(0.45f, 0.05f, 0.50f, 1f) };
     private static readonly Color[] P1_PILLAR = { new Color(0.18f, 0.10f, 0.45f, 1f), new Color(0.38f, 0.07f, 0.55f, 1f), new Color(0.07f, 0.01f, 0.18f, 1f), new Color(0.32f, 0.03f, 0.38f, 1f) };
@@ -129,10 +139,10 @@ internal class Abs : MonoBehaviour
         switch (type)
         {
             case 0: palettes = new[] { P0_SKY,    P1_SKY,    P2_SKY,    P3_SKY,    P4_SKY,    P5_SKY    }; break;
-            case 1: palettes = new[] { P0_PILLAR,  P1_PILLAR,  P2_PILLAR,  P3_PILLAR,  P4_PILLAR,  P5_PILLAR  }; break;
+            case 1: palettes = new[] { P0_PILLAR, P1_PILLAR, P2_PILLAR, P3_PILLAR, P4_PILLAR, P5_PILLAR }; break;
             case 2: palettes = new[] { P0_HAZE,   P1_HAZE,   P2_HAZE,   P3_HAZE,   P4_HAZE,   P5_HAZE   }; break;
             case 3: palettes = new[] { P0_CLOUD,  P1_CLOUD,  P2_CLOUD,  P3_CLOUD,  P4_CLOUD,  P5_CLOUD  }; break;
-            default: palettes = new[] { P0_RAY,    P1_RAY,    P2_RAY,    P3_RAY,    P4_RAY,    P5_RAY    }; break;
+            default: palettes = new[] { P0_RAY,   P1_RAY,    P2_RAY,    P3_RAY,    P4_RAY,    P5_RAY    }; break;
         }
         int idx = Mathf.Clamp(PALETTE_ACTIVE, 0, palettes.Length - 1);
         return palettes[idx];
@@ -146,12 +156,41 @@ internal class Abs : MonoBehaviour
     internal const bool ENABLE_HAZE_COLOR   = true;
     internal const bool ENABLE_SKY_COLOR    = true;
 
+    private const bool ORB_CROSS_GROUND_ENABLED = true;
 
-    private const string TEXT_SWORD_RAIN_END       = "YOUR GOD CANNOT HEAR YOUR PRAYERS HERE";
-    private const string TEXT_CLIMB_START          = "RISE HIGH AND FALL";
-    private const string TEXT_CLIMB_FINAL_MESSAGE  = "COME MEET YOUR END VESSEL";
-    private const string TEXT_AFTER_FINAL_MESSAGE  = "WHY";
-    private const string TEXT_DEAD                 = "UNTHINKABLE...";
+    private const string TEXT_SWORD_RAIN_END     = "YOUR GOD CANNOT HEAR YOUR PRAYERS HERE";
+    private const string TEXT_SWORD_RAIN_END_OJB = "plats qol";
+    private const float  TEXT_SWORD_RAIN_END_ALT_CHANCE = 0.02f;
+
+    private static readonly string[] TEXT_SWORD_RAIN_END_ALTS =
+    {
+        "here we go back to plats",
+        "Remember to stay hydrated!"
+
+    };
+
+    // ── TEXTOS CON CHANCE (2%) ───────────────────────────────────────
+    private const string TEXT_CLIMB_START         = "RISE HIGH AND FALL";
+    private const float  TEXT_CLIMB_START_ALT_CHANCE = 0.02f;
+    private static readonly string[] TEXT_CLIMB_START_ALTS =
+    {
+        "okay im in final pleaseeeee, alright gg, i better bro im gonna choke im gonna choke AAAAAAAA desk slam"
+    };
+
+    private const string TEXT_CLIMB_FINAL_MESSAGE = "COME MEET YOUR END VESSEL";
+    private const float  TEXT_CLIMB_FINAL_ALT_CHANCE = 0.02f;
+    private static readonly string[] TEXT_CLIMB_FINAL_MESSAGE_ALTS =
+    {
+        "wait shadow is cooking"
+    };
+
+    private const string TEXT_DEAD                = "UNTHINKABLE...";
+    private const float  TEXT_DEAD_ALT_CHANCE = 0.02f;
+    private static readonly string[] TEXT_DEAD_ALTS =
+    {
+        "My light will never extinguish..."
+    };
+
 
     private const float CLIMB_START_TEXT_Y = 135f;
 
@@ -161,9 +200,11 @@ internal class Abs : MonoBehaviour
     private const float SWORDRAIN_BEAM_OFF_D  = 13f;
     private const float SWORDRAIN_BEAM_OFF_E  = 16f;
     private const float SWORDRAIN_BEAM_Y      = 20f;
+    private const float SWORDRAIN_VOLLEY_INITIAL_DELAY = 3f;
+    private const float SWORDRAIN_VOLLEY_INTERVAL      = 0.5f;   // antes hardcoded 2f
 
-
-    private const bool  ORB_CROSS_X_GROUND          = true;
+    // ── ORB CROSS — ahora GROUND también usa la X (45°/135°/225°/315°) ──
+    private const bool  ORB_CROSS_X_GROUND          = true;   // CAMBIADO: era false
     private const bool  ORB_CROSS_X_PLAT            = true;
     private const bool  ORB_CROSS_X_FINAL           = true;
 
@@ -174,17 +215,16 @@ internal class Abs : MonoBehaviour
     private const float ORB_CROSS_FIRE_TIME_OTHER   = 0.1f;
 
     private const float FATAL_SWEEP_FIRST_DELAY = 2f;
-    private const float FATAL_SWEEP_INTERVAL    = 4f;
-    private const float FATAL_SWEEP_STEP        = 3f;
+    private const float FATAL_SWEEP_INTERVAL    = 0.5f;
+    private const float FATAL_SWEEP_STEP        = 1f;
     private const float FATAL_SWEEP_SAFE_ZONE   = 4f;
     private const float FATAL_SWEEP_ANTIC_TIME  = 0.4f;
-    private const float FATAL_SWEEP_FIRE_TIME   = 0.25f;
+    private const float FATAL_SWEEP_FIRE_TIME   = 0.2f;
 
     private const float CLIMB_DEACT_Y1         = 77f;
     private const float CLIMB_DEACT_Y3         = 110f;
     private const float CLIMB_FLANKS_FIRE_TIME = 0.5f;
     private const float CLIMB_SWEEP_ANGLE_START= 90f;
-
 
     private const int   PLAT_DOWN_SPIKES_HP = 2450;
     private const float PLAT_DOWN_Y_G0 = 37.5f;
@@ -215,11 +255,11 @@ internal class Abs : MonoBehaviour
     private GameObject    _eyeBeamTemplate = null;
 
     private GameObject    _halo;
-    private GameObject    _halo1;              
-    private GameObject    _halo2;             
-    private GameObject    _halo1Rev;             
-    private GameObject    _halo1ExtraB;          
-    private GameObject    _halo1ExtraC;          
+    private GameObject    _halo1;
+    private GameObject    _halo2;
+    private GameObject    _halo1Rev;
+    private GameObject    _halo1ExtraB;
+    private GameObject    _halo1ExtraC;
 
     private FsmEventTarget _combTopTarget;
     private int            _spiralOrbIndex = 0;
@@ -275,9 +315,7 @@ internal class Abs : MonoBehaviour
     // Beams verticales de sword rain
     private GameObject _srLA, _srRA, _srLB, _srRB, _srLC, _srRC, _srLD, _srRD, _srLE, _srRE;
 
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // ATAQUE DE ESPADAS — FASE FINAL
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // ── FASE FINAL ──────────────────────────────────────────────────
     private enum FinalTeleSpot { None, Left, Center, Right }
     private FinalTeleSpot _lastTeleSpot = FinalTeleSpot.None;
 
@@ -322,6 +360,10 @@ internal class Abs : MonoBehaviour
     private bool _platRotatedSpikesShown         = false;
     private bool _climbStartTextShown            = false;
     private int  _platHpAtEntry                  = 0;
+    private bool _climbFinalMessageShown = false;
+
+    // OJB Quality of Life
+    private bool _ojbActivated = false;
 
     private bool _groundSpikeStage1 = false;
     private bool _groundSpikeStage2 = false;
@@ -338,6 +380,21 @@ internal class Abs : MonoBehaviour
 
     // Coroutine de oscilación haze
     private Coroutine _finalHazeOscillateCoroutine;
+    private Coroutine _finalBgOscCoroutine;
+
+    // Coroutine de tint oscillator del halo2
+    private Coroutine _halo2TintOscCoroutine;
+
+    // ── SWORD RAIN BEAM VOLLEY ───────────────────────────────────────
+    private bool _swordRainVolleyInProgress = false;
+
+    // ── HELPER: selecciona texto con chance de alternativa ───────────
+    private static string PickText(string main, float altChance, string[] alts)
+    {
+        if (alts != null && alts.Length > 0 && Random.value < altChance)
+            return alts[Random.Range(0, alts.Length)];
+        return main;
+    }
 
     private void Awake()
     {
@@ -369,15 +426,14 @@ internal class Abs : MonoBehaviour
         if (bsT != null) _eyeBeamTemplate = bsT.gameObject;
     }
 
-
     private void Start()
     {
         GameObject arena_prefab = GameObject.Find("GG_Arena_Prefab");
         if (arena_prefab != null)
         {
-            GameObject crowd = GameObject.Find("Crowd");
-            if (crowd != null) crowd.SetActive(false);
-            GameObject gs_crowd = GameObject.Find("Godseeker Crowd");
+            var crowd    = GameObject.Find("Crowd");
+            if (crowd    != null) crowd.SetActive(false);
+            var gs_crowd = GameObject.Find("Godseeker Crowd");
             if (gs_crowd != null) gs_crowd.SetActive(false);
         }
 
@@ -422,10 +478,16 @@ internal class Abs : MonoBehaviour
                 var orb = _attackCommands.FsmVariables.FindFsmGameObject("Projectile").Value;
                 if (orb == null) return;
                 var beamTpl = _attackCommands.FsmVariables.FindFsmGameObject("Ascend Beam").Value ?? ascendBeam;
-                var orbFSM = orb.LocateMyFSM("Orb Control");
+                var orbFSM  = orb.LocateMyFSM("Orb Control");
                 if (orbFSM == null) return;
-                FsmutilExt.InsertAction(orbFSM, "Impact",
-                    new AuraAction(() => { if (beamTpl != null) StartCoroutine(OrbCrossBeam(orb.transform.position, beamTpl)); }), 0);
+
+                bool isGroundPhase = !swordRainSpikesSet && !arena2Set && !finalDanceExtraAttackConfigured;
+                bool spawnCross    = isGroundPhase ? ORB_CROSS_GROUND_ENABLED : true;
+
+                if (spawnCross)
+                    FsmutilExt.InsertAction(orbFSM, "Impact",
+                        new AuraAction(() => { if (beamTpl != null) StartCoroutine(OrbCrossBeam(orb.transform.position, beamTpl)); }), 0);
+
                 if (!(swordRainSpikesSet && !swordRainEndSet))
                     StartCoroutine(ApplySpiralVelocity(orb));
             }), 2);
@@ -467,18 +529,18 @@ internal class Abs : MonoBehaviour
         _attackCommands.GetAction<Wait>("EB 2", 10).time            = 0.4f;
         _attackCommands.GetAction<SendEventByName>("EB 3", 9).delay = 0.2f;
         _attackCommands.GetAction<Wait>("EB 3", 10).time            = 0.4f;
-        _attackCommands.GetAction<SendEventByName>("EB 4", 4).delay = 0.3f;
-        _attackCommands.GetAction<Wait>("EB 4", 5).time             = 0.5f;
-        _attackCommands.GetAction<SendEventByName>("EB 5", 5).delay = 0.3f;
-        _attackCommands.GetAction<Wait>("EB 5", 6).time             = 0.5f;
-        _attackCommands.GetAction<SendEventByName>("EB 6", 5).delay = 0.3f;
-        _attackCommands.GetAction<Wait>("EB 6", 6).time             = 0.5f;
-        _attackCommands.GetAction<SendEventByName>("EB 7", 8).delay = 0.4f;
-        _attackCommands.GetAction<Wait>("EB 7", 9).time             = 0.6f;
-        _attackCommands.GetAction<SendEventByName>("EB 8", 8).delay = 0.4f;
-        _attackCommands.GetAction<Wait>("EB 8", 9).time             = 0.6f;
-        _attackCommands.GetAction<SendEventByName>("EB 9", 8).delay = 0.4f;
-        _attackCommands.GetAction<Wait>("EB 9", 9).time             = 0.6f;
+        _attackCommands.GetAction<SendEventByName>("EB 4", 4).delay = 0.2f;
+        _attackCommands.GetAction<Wait>("EB 4", 5).time             = 0.4f;
+        _attackCommands.GetAction<SendEventByName>("EB 5", 5).delay = 0.2f;
+        _attackCommands.GetAction<Wait>("EB 5", 6).time             = 0.4f;
+        _attackCommands.GetAction<SendEventByName>("EB 6", 5).delay = 0.2f;
+        _attackCommands.GetAction<Wait>("EB 6", 6).time             = 0.4f;
+        _attackCommands.GetAction<SendEventByName>("EB 7", 8).delay = 0.2f;
+        _attackCommands.GetAction<Wait>("EB 7", 9).time             = 0.4f;
+        _attackCommands.GetAction<SendEventByName>("EB 8", 8).delay = 0.2f;
+        _attackCommands.GetAction<Wait>("EB 8", 9).time             = 0.4f;
+        _attackCommands.GetAction<SendEventByName>("EB 9", 8).delay = 0.2f;
+        _attackCommands.GetAction<Wait>("EB 9", 9).time             = 0.4f;
         _attackCommands.GetAction<Wait>("Eb Extra Wait", 0).time    = 0.05f;
         _attackCommands.GetAction<SendEventByName>("Aim", 10).delay = 2f;
         _attackCommands.GetAction<Wait>("Aim", 11).time             = 0.7f;
@@ -489,6 +551,8 @@ internal class Abs : MonoBehaviour
         _attackChoices.GetAction<SendEventByName>("Nail Top Sweep", 1).delay = 0.35f;
         _attackChoices.GetAction<SendEventByName>("Nail Top Sweep", 2).delay = 0.7f;
         _attackChoices.GetAction<SendEventByName>("Nail Top Sweep", 3).delay = 1.05f;
+
+
 
         _attackChoices.GetAction<SendEventByName>("Nail L Sweep", 1).delay = 1.85f;
         _attackChoices.GetAction<SendEventByName>("Nail L Sweep", 2).delay = 3.45f;
@@ -549,15 +613,9 @@ internal class Abs : MonoBehaviour
 
                 switch (_lastTeleSpot)
                 {
-                    case FinalTeleSpot.Left:
-                        _finalSwordCoroutine = StartCoroutine(FinalSwordVolley(false, true));
-                        break;
-                    case FinalTeleSpot.Right:
-                        _finalSwordCoroutine = StartCoroutine(FinalSwordVolley(true, false));
-                        break;
-                    case FinalTeleSpot.Center:
-                        _finalSwordCoroutine = StartCoroutine(FinalSwordVolley(true, true));
-                        break;
+                    case FinalTeleSpot.Left:   _finalSwordCoroutine = StartCoroutine(FinalSwordVolley(false, true));  break;
+                    case FinalTeleSpot.Right:  _finalSwordCoroutine = StartCoroutine(FinalSwordVolley(true, false));  break;
+                    case FinalTeleSpot.Center: _finalSwordCoroutine = StartCoroutine(FinalSwordVolley(true, true));   break;
                 }
             }), 0);
 
@@ -634,12 +692,12 @@ internal class Abs : MonoBehaviour
         // SPIKE GROUPS HACIA ABAJO
         for (float x = 58.5f; x <= 62.5f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G0 - ADJUST_Y), 180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup30.Add(g); }
         for (float x = 49.7f; x <= 53.7f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G1 - ADJUST_Y), 180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup31.Add(g); }
-        for (float x = 41.4f; x <= 43.4f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G2 - ADJUST_Y),  180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup32.Add(g); }
-        for (float x = 41.4f; x <= 43.4f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G2B), 0f);   g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup32.Add(g); }
-        for (float x = 46.2f; x <= 48.2f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G3 - ADJUST_Y),  180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup33.Add(g); }
-        for (float x = 66.8f; x <= 68.8f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G5 - ADJUST_Y),  180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup35.Add(g); }
-        for (float x = 71.7f; x <= 73.7f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G6 - ADJUST_Y),  180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup36.Add(g); }
-        for (float x = 57.5f; x <= 61.5f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G7 - ADJUST_Y),  180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup37.Add(g); }
+        for (float x = 41.4f; x <= 43.4f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G2 - ADJUST_Y), 180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup32.Add(g); }
+        for (float x = 41.4f; x <= 43.4f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G2B),            0f);   g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup32.Add(g); }
+        for (float x = 46.2f; x <= 48.2f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G3 - ADJUST_Y), 180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup33.Add(g); }
+        for (float x = 66.8f; x <= 68.8f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G5 - ADJUST_Y), 180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup35.Add(g); }
+        for (float x = 71.7f; x <= 73.7f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G6 - ADJUST_Y), 180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup36.Add(g); }
+        for (float x = 57.5f; x <= 61.5f; x += 1f) { var g = SpawnSpikeRotated(new Vector2(x, PLAT_DOWN_Y_G7 - ADJUST_Y), 180f); g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup37.Add(g); }
 
         // SPIKE GROUPS CLIMB
         for (float x = 61.6f; x <= 65.6f;  x += 1f) { var g = SpawnSpike(new Vector2(x, 51.8f));   g.LocateMyFSM("Control").SendEvent("DOWN"); _spikeGroup8.Add(g); }
@@ -673,6 +731,18 @@ internal class Abs : MonoBehaviour
 
     private void Update()
     {
+
+        if (!_ojbActivated
+            && _hm != null
+            && _hm.hp > PHASE_PLATFORMS
+            && !swordRainEndSet
+            && UnityEngine.Input.GetKeyDown(KeyCode.O))
+        {
+            _ojbActivated = true;
+            _hm.hp        = PHASE_PLATFORMS;
+            Log("HP forzado a " + PHASE_PLATFORMS);
+        }
+
         if (_attackCommands.FsmVariables.GetFsmBool("Repeated").Value)
         {
             switch (CWRepeats)
@@ -713,20 +783,24 @@ internal class Abs : MonoBehaviour
             swordRainSpikesSet = true;
             groundSpikesLocked = true;
             _spikeMasterControl.enabled = false;
+
             foreach (var spike in _allGroundSpikes)
             {
                 spike?.LocateMyFSM("Control")?.SendEvent("UP");
                 var d = spike?.GetComponent<DamageHero>();
-                if (d != null) d.damageDealt = 1;
+                if (d != null) { d.damageDealt = 1; d.hazardType = 1; d.shadowDashHazard = true; }
             }
+
             StartCoroutine(SwordRainVerticalBeams());
             StartCoroutine(FatalBeamSweepLoop());
             StartCoroutine(SwordRainGroundLoop());
+            StartCoroutine(SwordRainSimpleBeamLoop());
+
             SetBossAfterimage(BOSS_AFTERIMAGE_PHASE_SWORD_RAIN);
             SetHalo1Phase(1);
             SetHalo2Phase(1);
+            SetHalo2Size(HALO2_SIZE_SWORD_RAIN, 1.5f);
         }
-
 
         if (_hm.hp <= PHASE_PLATFORMS && !swordRainEndSet)
         {
@@ -741,8 +815,15 @@ internal class Abs : MonoBehaviour
                 if (sp != null) { sp.LocateMyFSM("Control")?.SendEvent("DOWN"); Object.Destroy(sp, 1.0f); }
             _extremeGroundSpikes.Clear();
 
-            StartCoroutine(DelayedConvo(TEXT_SWORD_RAIN_END, 7f));
+            string transitionText;
+            if (_ojbActivated)
+                transitionText = TEXT_SWORD_RAIN_END_OJB;
+            else if (Random.value < TEXT_SWORD_RAIN_END_ALT_CHANCE)
+                transitionText = TEXT_SWORD_RAIN_END_ALTS[Random.Range(0, TEXT_SWORD_RAIN_END_ALTS.Length)];
+            else
+                transitionText = TEXT_SWORD_RAIN_END;
 
+            StartCoroutine(DelayedConvo(transitionText, 7f));
 
             StartCoroutine(HaloClockThenBeat(_halo1, () =>
             {
@@ -750,7 +831,6 @@ internal class Abs : MonoBehaviour
                     BG_SKY_PHASE(1), BG_PILLAR_PHASE(1), BG_HAZE_PHASE(1),
                     BG_CLOUD_PHASE(1), BG_RAY_PHASE(1), BG_TRANSITION_DURATION));
             }));
-
 
             StartCoroutine(FadeOutHalo(_halo2));
 
@@ -760,7 +840,6 @@ internal class Abs : MonoBehaviour
 
             _platHpAtEntry = _hm.hp;
         }
-
 
         if (_attackChoices.FsmVariables.GetFsmInt("Arena").Value == 2 && !arena2Set)
         {
@@ -778,7 +857,6 @@ internal class Abs : MonoBehaviour
             _beamsweeper2control.GetAction<SetPosition>("Beam Sweep R", 3).x           = 32.6f;
             _beamsweeper2control.GetAction<iTweenMoveBy>("Beam Sweep R", 5).vector      = new Vector3(75f, 0f, 0f);
             _beamsweeper2control.GetAction<iTweenMoveBy>("Beam Sweep R", 5).time        = 5f;
-
 
             if (_halo1 != null && !_halo1.activeSelf) _halo1.SetActive(true);
             if (_halo2 != null && !_halo2.activeSelf) _halo2.SetActive(true);
@@ -802,6 +880,7 @@ internal class Abs : MonoBehaviour
             SetBossAfterimage(BOSS_AFTERIMAGE_PHASE_PLATFORMS);
             SetHalo1Phase(2);
             SetHalo2Phase(2);
+            SetHalo2Size(HALO2_SIZE_PLATFORMS, 2.0f);
 
             _attackCommands.GetAction<Wait>("Orb Pause", 0).time.Value  = 0.6f;
             _attackChoices.GetAction<Wait>("Orb Recover", 0).time.Value = 1.5f;
@@ -844,7 +923,11 @@ internal class Abs : MonoBehaviour
 
         if (_climbHPReached && base.gameObject.transform.position.y >= 150f)
         {
-            SendUpToGroup(_spikeGroup8);  SendUpToGroup(_spikeGroup9);
+            if (!_climbFinalMessageShown)
+            {
+                _climbFinalMessageShown = true;
+                ShowConvo(PickText(TEXT_CLIMB_FINAL_MESSAGE, TEXT_CLIMB_FINAL_ALT_CHANCE, TEXT_CLIMB_FINAL_MESSAGE_ALTS));
+            }
             SendUpToGroup(_spikeGroup8);  SendUpToGroup(_spikeGroup9);
             SendUpToGroup(_spikeGroup10); SendUpToGroup(_spikeGroup11);
             SendUpToGroup(_spikeGroup12); SendUpToGroup(_spikeGroup13);
@@ -878,15 +961,13 @@ internal class Abs : MonoBehaviour
             && _knight.transform.GetPositionY() >= CLIMB_START_TEXT_Y)
         {
             _climbStartTextShown = true;
-            ShowConvo(TEXT_CLIMB_START);
+            ShowConvo(PickText(TEXT_CLIMB_START, TEXT_CLIMB_START_ALT_CHANCE, TEXT_CLIMB_START_ALTS));
         }
-
 
         if (_knight.transform.GetPositionY() > 152f && !finalDanceExtraAttackConfigured)
         {
             finalDanceExtraAttackConfigured = true;
 
-            // Lanzar transición suave de halos y fondo
             StartCoroutine(ClimbToFinalTransition());
 
             _hm.hp += FINAL_PHASE_HEAL;
@@ -913,13 +994,12 @@ internal class Abs : MonoBehaviour
             StartCoroutine(FinalStaticBeam());
             StartCoroutine(EnableFinalSwordAfterDelay());
             SetBossAfterimage(BOSS_AFTERIMAGE_PHASE_FINAL);
+            SetHalo2Size(HALO2_SIZE_FINAL, 2.5f);
+            StartHalo2TintOscillator();
         }
-
 
         if (_hm.hp <= PHASE_CLIMB && !finalDanceOrbsConfigured)
         {
-            ShowConvo(TEXT_CLIMB_FINAL_MESSAGE);
-            finalDanceOrbsConfigured = true;
             _attackCommands.GetAction<Wait>("Orb Antic", 0).time.Value      = 1.8f;
             _attackCommands.GetAction<Wait>("FinalOrb Pause", 0).time.Value = 1.4f;
             _attackChoices.GetAction<Wait>("Orb Recover", 0).time.Value     = 1.8f;
@@ -963,7 +1043,7 @@ internal class Abs : MonoBehaviour
         if (_hm.hp < 720 && !_deadConvoShown)
         {
             _deadConvoShown = true;
-            ShowConvo(TEXT_DEAD);
+            ShowConvo(PickText(TEXT_DEAD, TEXT_DEAD_ALT_CHANCE, TEXT_DEAD_ALTS));
         }
     }
 
@@ -986,7 +1066,6 @@ internal class Abs : MonoBehaviour
                 Log("SetupHalos: Halo0 aplicado.");
             }
 
-            //HALO 1
             if (AuraRadiance.Halo1Texture != null)
             {
                 _halo1 = Object.Instantiate(_halo, _halo.transform.position, Quaternion.Euler(0, 0, 90), _halo.transform.parent);
@@ -1004,15 +1083,14 @@ internal class Abs : MonoBehaviour
                 }
 
                 var anim1 = _halo1.AddComponent<AuraHaloAnimator>();
-                anim1.beatEnabled  = HALO1_BEAT_ENABLED;
-                anim1.beatMinScale = HALO1_BEAT_MIN;
-                anim1.beatMaxScale = HALO1_BEAT_MAX;
+                anim1.beatEnabled   = HALO1_BEAT_ENABLED;
+                anim1.beatMinScale  = HALO1_BEAT_MIN;
+                anim1.beatMaxScale  = HALO1_BEAT_MAX;
                 anim1.beatFrequency = HALO1_BEAT_FREQ;
                 anim1.BuildDefaultPhases();
                 anim1.SetPhase(0);
                 Log("SetupHalos: Halo1 con AuraHaloAnimator.");
             }
-
 
             if (AuraRadiance.Halo2Texture != null)
             {
@@ -1037,8 +1115,6 @@ internal class Abs : MonoBehaviour
             }
             else { Log("SetupHalos: Halo2Texture no disponible."); }
 
-
-
             if (HALO1_REV_ENABLED && AuraRadiance.Halo1Texture != null && _halo1 != null)
             {
                 _halo1Rev = Object.Instantiate(_halo, _halo.transform.position, Quaternion.Euler(0, 0, -90), _halo.transform.parent);
@@ -1058,18 +1134,11 @@ internal class Abs : MonoBehaviour
 
                 var rotRev = _halo1Rev.AddComponent<AuraHaloSimpleRotator>();
                 rotRev.phases.Clear();
-
-                rotRev.phases.Add(new AuraHaloSimpleRotatorPhase
-                {
-                    spinSpeed      = HALO1_REV_SPIN,
-                    targetAlpha    = HALO1_REV_ALPHA,
-                    alphaSmoothing = 5f
-                });
+                rotRev.phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed = HALO1_REV_SPIN, targetAlpha = HALO1_REV_ALPHA, alphaSmoothing = 5f });
                 rotRev.SetPhase(0);
-                _halo1Rev.SetActive(false); 
-                Log("SetupHalos: Halo1Rev creado (desactivado hasta plataformas).");
+                _halo1Rev.SetActive(false);
+                Log("SetupHalos: Halo1Rev creado.");
             }
-
 
             if (HALO_EXTRA_B_ENABLED && AuraRadiance.Halo1Texture != null)
             {
@@ -1090,15 +1159,10 @@ internal class Abs : MonoBehaviour
 
                 var rotB = _halo1ExtraB.AddComponent<AuraHaloSimpleRotator>();
                 rotB.phases.Clear();
-                rotB.phases.Add(new AuraHaloSimpleRotatorPhase
-                {
-                    spinSpeed      = HALO_EXTRA_B_SPIN,
-                    targetAlpha    = HALO_EXTRA_B_ALPHA,
-                    alphaSmoothing = 6f
-                });
+                rotB.phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed = HALO_EXTRA_B_SPIN, targetAlpha = HALO_EXTRA_B_ALPHA, alphaSmoothing = 6f });
                 rotB.SetPhase(0);
                 _halo1ExtraB.SetActive(false);
-                Log("SetupHalos: Halo1ExtraB creado (desactivado hasta fase final).");
+                Log("SetupHalos: Halo1ExtraB creado.");
             }
 
             if (HALO_EXTRA_C_ENABLED && AuraRadiance.Halo1Texture != null)
@@ -1120,43 +1184,100 @@ internal class Abs : MonoBehaviour
 
                 var rotC = _halo1ExtraC.AddComponent<AuraHaloSimpleRotator>();
                 rotC.phases.Clear();
-                rotC.phases.Add(new AuraHaloSimpleRotatorPhase
-                {
-                    spinSpeed      = HALO_EXTRA_C_SPIN,
-                    targetAlpha    = HALO_EXTRA_C_ALPHA,
-                    alphaSmoothing = 7f
-                });
+                rotC.phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed = HALO_EXTRA_C_SPIN, targetAlpha = HALO_EXTRA_C_ALPHA, alphaSmoothing = 7f });
                 rotC.SetPhase(0);
                 _halo1ExtraC.SetActive(false);
-                Log("SetupHalos: Halo1ExtraC creado (desactivado hasta fase final).");
+                Log("SetupHalos: Halo1ExtraC creado.");
             }
         }
         catch (System.Exception e) { Log("Error en SetupHalos: " + e.Message); }
     }
 
+    private void SetHalo1Phase(int phase) => _halo1?.GetComponent<AuraHaloAnimator>()?.SetPhase(phase);
+    private void SetHalo2Phase(int phase) => _halo2?.GetComponent<AuraHaloSimpleRotator>()?.SetPhase(phase);
 
-    private void SetHalo1Phase(int phase)
-    {
-        if (_halo1 == null) return;
-        _halo1.GetComponent<AuraHaloAnimator>()?.SetPhase(phase);
-    }
-
-    private void SetHalo2Phase(int phase)
+    // Cambia el tamaño (escala uniforme XY) del halo2 con transición suave opcional.
+    private void SetHalo2Size(float targetSize, float transitionDuration = 0f)
     {
         if (_halo2 == null) return;
-        _halo2.GetComponent<AuraHaloSimpleRotator>()?.SetPhase(phase);
+        if (transitionDuration <= 0f)
+        {
+            _halo2.transform.localScale = new Vector3(targetSize, targetSize, 1f);
+        }
+        else
+        {
+            StartCoroutine(LerpHalo2Scale(targetSize, transitionDuration));
+        }
     }
 
-    private void Halo1Bounce(float scale = 1.5f, float duration = 0.15f)
+    private IEnumerator LerpHalo2Scale(float target, float duration)
     {
-        _halo1?.GetComponent<AuraHaloAnimator>()?.TriggerBounce(scale, duration);
+        if (_halo2 == null) yield break;
+        Vector3 from = _halo2.transform.localScale;
+        float elapsed = 0f;
+        while (elapsed < duration && _halo2 != null)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(elapsed / duration));
+            _halo2.transform.localScale = Vector3.Lerp(from, new Vector3(target, target, 1f), t);
+            yield return null;
+        }
+        if (_halo2 != null) _halo2.transform.localScale = new Vector3(target, target, 1f);
     }
 
-    private void Halo1SpinImpulse(float amount = -6f)
+    // Inicia el oscilador de tinte del halo2 (para la fase final).
+    private void StartHalo2TintOscillator()
     {
-        _halo1?.GetComponent<AuraHaloAnimator>()?.SpinImpulse(amount);
+        if (_halo2TintOscCoroutine != null) StopCoroutine(_halo2TintOscCoroutine);
+        _halo2TintOscCoroutine = StartCoroutine(Halo2TintOscillate());
     }
 
+    private void StopHalo2TintOscillator()
+    {
+        if (_halo2TintOscCoroutine != null)
+        {
+            StopCoroutine(_halo2TintOscCoroutine);
+            _halo2TintOscCoroutine = null;
+        }
+        // Restaura el tinte a neutro al parar
+        if (_halo2 != null)
+        {
+            var sr = _halo2.GetComponent<SpriteRenderer>();
+            if (sr != null) { var c = sr.color; sr.color = new Color(HALO2_TINT_OSC_COLOR_A.r, HALO2_TINT_OSC_COLOR_A.g, HALO2_TINT_OSC_COLOR_A.b, c.a); }
+        }
+    }
+
+    private IEnumerator Halo2TintOscillate()
+    {
+        if (!HALO2_TINT_OSC_ENABLED || _halo2 == null) yield break;
+        var sr = _halo2.GetComponent<SpriteRenderer>();
+        if (sr == null) yield break;
+
+        bool towardB = true;
+        while (_halo2 != null)
+        {
+            Color from = towardB ? HALO2_TINT_OSC_COLOR_A : HALO2_TINT_OSC_COLOR_B;
+            Color to   = towardB ? HALO2_TINT_OSC_COLOR_B : HALO2_TINT_OSC_COLOR_A;
+            float elapsed = 0f;
+            while (elapsed < HALO2_TINT_OSC_HALF_PERIOD && _halo2 != null)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / HALO2_TINT_OSC_HALF_PERIOD);
+                float smooth = t * t * (3f - 2f * t);
+                Color cur = Color.Lerp(from, to, smooth);
+                if (sr != null) sr.color = new Color(cur.r, cur.g, cur.b, sr.color.a);
+                yield return null;
+            }
+            // Aplicar color destino exacto
+            if (sr != null) sr.color = new Color(to.r, to.g, to.b, sr.color.a);
+
+            // Pausa en el color de llegada
+            float hold = towardB ? HALO2_TINT_OSC_HOLD_B : HALO2_TINT_OSC_HOLD_A;
+            if (hold > 0f) yield return new WaitForSeconds(hold);
+
+            towardB = !towardB;
+        }
+    }
 
     private IEnumerator HaloClockThenBeat(GameObject haloGO, System.Action onColorDone = null)
     {
@@ -1165,21 +1286,15 @@ internal class Abs : MonoBehaviour
         if (anim == null) yield break;
 
         anim.StartClockAnimation(HALO_CLOCK_QUARTER_TIME);
-
         yield return new WaitUntil(() => anim.IsClockDone);
         onColorDone?.Invoke();
-
-
         yield return new WaitUntil(() => anim.IsVanishDone);
-
         if (haloGO != null && !haloGO.activeSelf) haloGO.SetActive(true);
     }
-
 
     private IEnumerator ClimbToFinalTransition()
     {
         float dur = CLIMB_FINAL_TRANSITION_DUR;
-
 
         if (HALO1_REV_ENABLED && _halo1Rev != null && _halo1Rev.activeSelf)
             StartCoroutine(FadeOutAndDisableHalo(_halo1Rev, dur * 0.6f));
@@ -1188,9 +1303,7 @@ internal class Abs : MonoBehaviour
             BG_SKY_PHASE(3), BG_PILLAR_PHASE(3), BG_HAZE_PHASE(3),
             BG_CLOUD_PHASE(3), BG_RAY_PHASE(3), BG_TRANSITION_DURATION));
 
-        // Breve pausa antes de cambiar halos para suavizar el corte
         yield return new WaitForSeconds(dur * 0.35f);
-
 
         SetHalo1Phase(3);
         SetHalo2Phase(3);
@@ -1207,40 +1320,33 @@ internal class Abs : MonoBehaviour
             StartCoroutine(FadeInHalo(_halo1ExtraC, HALO_EXTRA_C_ALPHA, dur * 1.0f));
         }
 
-        // Esperar a que termine la transición antes de arrancar el haze oscilante
         yield return new WaitForSeconds(dur * 0.5f);
 
-        if (HAZE_OSC_ENABLED)
+        if (FINAL_BG_OSC_ENABLED)
+        {
+            if (_finalBgOscCoroutine != null) StopCoroutine(_finalBgOscCoroutine);
+            _finalBgOscCoroutine = StartCoroutine(FinalBgOscillate());
+        }
+        else if (HAZE_OSC_ENABLED)
         {
             if (_finalHazeOscillateCoroutine != null) StopCoroutine(_finalHazeOscillateCoroutine);
             _finalHazeOscillateCoroutine = StartCoroutine(FinalHazeOscillate());
         }
     }
-
-
     private IEnumerator FadeInHalo(GameObject haloGO, float targetAlpha, float duration)
     {
         if (haloGO == null) yield break;
         var sr = haloGO.GetComponent<SpriteRenderer>();
         if (sr == null) yield break;
 
-        float elapsed = 0f;
-        float startA  = sr.color.a;
+        float elapsed = 0f, startA = sr.color.a;
         while (elapsed < duration && haloGO != null)
         {
             elapsed += Time.deltaTime;
-            if (sr != null)
-            {
-                var c = sr.color;
-                c.a = Mathf.Lerp(startA, targetAlpha, Mathf.Clamp01(elapsed / duration));
-                sr.color = c;
-            }
+            if (sr != null) { var c = sr.color; c.a = Mathf.Lerp(startA, targetAlpha, Mathf.Clamp01(elapsed / duration)); sr.color = c; }
             yield return null;
         }
-        if (haloGO != null && sr != null)
-        {
-            var c = sr.color; c.a = targetAlpha; sr.color = c;
-        }
+        if (haloGO != null && sr != null) { var c = sr.color; c.a = targetAlpha; sr.color = c; }
     }
 
     private IEnumerator FadeOutHalo(GameObject haloGO)
@@ -1256,9 +1362,7 @@ internal class Abs : MonoBehaviour
         while (elapsed < duration && haloGO != null)
         {
             elapsed += Time.deltaTime;
-            if (sr != null)
-                sr.color = new Color(startCol.r, startCol.g, startCol.b,
-                                     Mathf.Lerp(startCol.a, 0f, elapsed / duration));
+            if (sr != null) sr.color = new Color(startCol.r, startCol.g, startCol.b, Mathf.Lerp(startCol.a, 0f, elapsed / duration));
             yield return null;
         }
         if (haloGO != null) haloGO.SetActive(false);
@@ -1270,8 +1374,7 @@ internal class Abs : MonoBehaviour
         var sr = haloGO.GetComponent<SpriteRenderer>();
         if (sr == null) { haloGO.SetActive(false); yield break; }
 
-        float elapsed = 0f;
-        float startA  = sr.color.a;
+        float elapsed = 0f, startA = sr.color.a;
         while (elapsed < duration && haloGO != null)
         {
             elapsed += Time.deltaTime;
@@ -1281,15 +1384,20 @@ internal class Abs : MonoBehaviour
         if (haloGO != null) haloGO.SetActive(false);
     }
 
+    // ── BEAMS VERTICALES SWORD RAIN ──────────────────────────────────
 
     private IEnumerator SwordRainVerticalBeams()
     {
-        yield return new WaitForSeconds(3f);
-
-        GameObject tpl = _attackCommands.FsmVariables.FindFsmGameObject("Ascend Beam")?.Value;
-        if (tpl == null) tpl = GameObject.Find("Ascend Beam");
-        if (tpl == null) { var bsT = _beamsweeper?.transform.Find("Eye Beam"); if (bsT != null) tpl = bsT.gameObject; }
-        if (tpl == null) tpl = GameObject.Find("Eye Beam");
+        GameObject tpl = null;
+        float waited = 0f;
+        while (tpl == null && waited < 15f)
+        {
+            tpl = _attackCommands.FsmVariables.FindFsmGameObject("Ascend Beam")?.Value;
+            if (tpl == null) tpl = GameObject.Find("Ascend Beam");
+            if (tpl == null) { var bsT2 = _beamsweeper?.transform.Find("Eye Beam"); if (bsT2 != null) tpl = bsT2.gameObject; }
+            if (tpl == null) tpl = GameObject.Find("Eye Beam");
+            if (tpl == null) { waited += Time.deltaTime; yield return null; }
+        }
         if (tpl == null) { Log("SwordRainVerticalBeams: ningún template encontrado."); yield break; }
 
         _srLA = Object.Instantiate(tpl, Vector3.zero, Quaternion.Euler(0,0,90f)); _srLA.name = "SR LA"; _srLA.SetActive(true);
@@ -1303,47 +1411,79 @@ internal class Abs : MonoBehaviour
         _srLE = Object.Instantiate(tpl, Vector3.zero, Quaternion.Euler(0,0,90f)); _srLE.name = "SR LE"; _srLE.SetActive(true);
         _srRE = Object.Instantiate(tpl, Vector3.zero, Quaternion.Euler(0,0,90f)); _srRE.name = "SR RE"; _srRE.SetActive(true);
 
-        yield return null;
+        Log("SwordRainVerticalBeams: 10 beams listos.");
+    }
+
+    private IEnumerator SwordRainSimpleBeamLoop()
+    {
+        Log("Sword Rain Beam Loop: Esperando " + SWORDRAIN_VOLLEY_INITIAL_DELAY + " segundos...");
+        yield return new WaitForSeconds(SWORDRAIN_VOLLEY_INITIAL_DELAY);
+        Log("Sword Rain Beam Loop: Iniciando bucle de disparo.");
+
+        while (swordRainSpikesSet && !swordRainEndSet && _hm != null && _hm.hp > 0)
+        {
+            yield return StartCoroutine(SwordRainBeamVolleyOnce());
+            yield return new WaitForSeconds(SWORDRAIN_VOLLEY_INTERVAL);
+        }
+    }
+
+    private IEnumerator SwordRainBeamVolleyOnce()
+    {
+        _swordRainVolleyInProgress = true;
 
         var allBeams = new GameObject[] { _srLA, _srRA, _srLB, _srRB, _srLC, _srRC, _srLD, _srRD, _srLE, _srRE };
-        var allFsms  = System.Array.ConvertAll(allBeams, b => b?.LocateMyFSM("Control"));
 
-        while (!swordRainEndSet && _hm.hp > 0)
+        float waitedForBeams = 0f;
+        while (waitedForBeams < 3f)
         {
-            float bx = base.gameObject.transform.position.x;
-
-            void Pos(GameObject b, float offset) {
-                if (b != null) { b.transform.position = new Vector3(offset, SWORDRAIN_BEAM_Y, 0f); b.transform.rotation = Quaternion.Euler(0,0,90f); }
-            }
-            Pos(_srLA, bx - SWORDRAIN_BEAM_OFF_A); Pos(_srRA, bx + SWORDRAIN_BEAM_OFF_A);
-            Pos(_srLB, bx - SWORDRAIN_BEAM_OFF_B); Pos(_srRB, bx + SWORDRAIN_BEAM_OFF_B);
-            Pos(_srLC, bx - SWORDRAIN_BEAM_OFF_C); Pos(_srRC, bx + SWORDRAIN_BEAM_OFF_C);
-            Pos(_srLD, bx - SWORDRAIN_BEAM_OFF_D); Pos(_srRD, bx + SWORDRAIN_BEAM_OFF_D);
-            Pos(_srLE, bx - SWORDRAIN_BEAM_OFF_E); Pos(_srRE, bx + SWORDRAIN_BEAM_OFF_E);
-
-            allFsms[8]?.SendEvent("ANTIC"); allFsms[9]?.SendEvent("ANTIC");
-            yield return new WaitForSeconds(0.08f);
-            allFsms[6]?.SendEvent("ANTIC"); allFsms[7]?.SendEvent("ANTIC");
-            yield return new WaitForSeconds(0.08f);
-            allFsms[4]?.SendEvent("ANTIC"); allFsms[5]?.SendEvent("ANTIC");
-            yield return new WaitForSeconds(0.08f);
-            allFsms[2]?.SendEvent("ANTIC"); allFsms[3]?.SendEvent("ANTIC");
-            yield return new WaitForSeconds(0.08f);
-            allFsms[0]?.SendEvent("ANTIC"); allFsms[1]?.SendEvent("ANTIC");
-            yield return new WaitForSeconds(0.22f);
-
-            bx = base.gameObject.transform.position.x;
-            Pos(_srLA, bx - SWORDRAIN_BEAM_OFF_A); Pos(_srRA, bx + SWORDRAIN_BEAM_OFF_A);
-            Pos(_srLB, bx - SWORDRAIN_BEAM_OFF_B); Pos(_srRB, bx + SWORDRAIN_BEAM_OFF_B);
-            Pos(_srLC, bx - SWORDRAIN_BEAM_OFF_C); Pos(_srRC, bx + SWORDRAIN_BEAM_OFF_C);
-            Pos(_srLD, bx - SWORDRAIN_BEAM_OFF_D); Pos(_srRD, bx + SWORDRAIN_BEAM_OFF_D);
-            Pos(_srLE, bx - SWORDRAIN_BEAM_OFF_E); Pos(_srRE, bx + SWORDRAIN_BEAM_OFF_E);
-
-            foreach (var f in allFsms) f?.SendEvent("FIRE");
-            yield return new WaitForSeconds(0.5f);
-            foreach (var f in allFsms) f?.SendEvent("END");
-            yield return new WaitForSeconds(0.6f);
+            bool allReady = true;
+            foreach (var b in allBeams) if (b == null) { allReady = false; break; }
+            if (allReady) break;
+            waitedForBeams += Time.deltaTime;
+            yield return null;
         }
+
+        foreach (var b in allBeams)
+        {
+            if (b == null) { _swordRainVolleyInProgress = false; yield break; }
+        }
+
+        var allFsms = System.Array.ConvertAll(allBeams, b => b?.LocateMyFSM("Control"));
+
+        float bx = base.gameObject.transform.position.x;
+
+        void Pos(GameObject b, float offset) {
+            if (b != null) { b.transform.position = new Vector3(offset, SWORDRAIN_BEAM_Y, 0f); b.transform.rotation = Quaternion.Euler(0,0,90f); }
+        }
+        Pos(_srLA, bx - SWORDRAIN_BEAM_OFF_A); Pos(_srRA, bx + SWORDRAIN_BEAM_OFF_A);
+        Pos(_srLB, bx - SWORDRAIN_BEAM_OFF_B); Pos(_srRB, bx + SWORDRAIN_BEAM_OFF_B);
+        Pos(_srLC, bx - SWORDRAIN_BEAM_OFF_C); Pos(_srRC, bx + SWORDRAIN_BEAM_OFF_C);
+        Pos(_srLD, bx - SWORDRAIN_BEAM_OFF_D); Pos(_srRD, bx + SWORDRAIN_BEAM_OFF_D);
+        Pos(_srLE, bx - SWORDRAIN_BEAM_OFF_E); Pos(_srRE, bx + SWORDRAIN_BEAM_OFF_E);
+
+        allFsms[8]?.SendEvent("ANTIC"); allFsms[9]?.SendEvent("ANTIC");
+        yield return new WaitForSeconds(0.08f);
+        allFsms[6]?.SendEvent("ANTIC"); allFsms[7]?.SendEvent("ANTIC");
+        yield return new WaitForSeconds(0.08f);
+        allFsms[4]?.SendEvent("ANTIC"); allFsms[5]?.SendEvent("ANTIC");
+        yield return new WaitForSeconds(0.08f);
+        allFsms[2]?.SendEvent("ANTIC"); allFsms[3]?.SendEvent("ANTIC");
+        yield return new WaitForSeconds(0.08f);
+        allFsms[0]?.SendEvent("ANTIC"); allFsms[1]?.SendEvent("ANTIC");
+        yield return new WaitForSeconds(0.22f);
+
+        bx = base.gameObject.transform.position.x;
+        Pos(_srLA, bx - SWORDRAIN_BEAM_OFF_A); Pos(_srRA, bx + SWORDRAIN_BEAM_OFF_A);
+        Pos(_srLB, bx - SWORDRAIN_BEAM_OFF_B); Pos(_srRB, bx + SWORDRAIN_BEAM_OFF_B);
+        Pos(_srLC, bx - SWORDRAIN_BEAM_OFF_C); Pos(_srRC, bx + SWORDRAIN_BEAM_OFF_C);
+        Pos(_srLD, bx - SWORDRAIN_BEAM_OFF_D); Pos(_srRD, bx + SWORDRAIN_BEAM_OFF_D);
+        Pos(_srLE, bx - SWORDRAIN_BEAM_OFF_E); Pos(_srRE, bx + SWORDRAIN_BEAM_OFF_E);
+
+        foreach (var f in allFsms) f?.SendEvent("FIRE");
+        yield return new WaitForSeconds(0.5f);
+        foreach (var f in allFsms) f?.SendEvent("END");
+
+        _swordRainVolleyInProgress = false;
     }
 
     private IEnumerator FatalBeamSweepLoop()
@@ -1421,7 +1561,6 @@ internal class Abs : MonoBehaviour
         if (beam != null) Object.Destroy(beam);
     }
 
-
     private void ShowConvo(string msg)
     {
         try
@@ -1449,7 +1588,6 @@ internal class Abs : MonoBehaviour
         }
         catch { }
     }
-
 
     private void RedirectWallVertical()
     {
@@ -1540,7 +1678,6 @@ internal class Abs : MonoBehaviour
         if (bL != null) Object.Destroy(bL);
     }
 
-
     private IEnumerator IndependentBeamLoop(GameObject beam, float xOffset, float startDelay)
     {
         if (startDelay > 0f) yield return new WaitForSeconds(startDelay);
@@ -1592,9 +1729,6 @@ internal class Abs : MonoBehaviour
         }
         ascendBeam.SetActive(false);
 
-        yield return new WaitForSeconds(0f);
-        //ShowConvo(TEXT_AFTER_FINAL_MESSAGE);
-
         bool d1 = false, d3 = false;
         while (_hm != null && _hm.hp > 0 && !finalDanceExtraAttackConfigured
                && _knight.transform.GetPositionY() < 152f)
@@ -1626,9 +1760,7 @@ internal class Abs : MonoBehaviour
         }
     }
 
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // CLIMB FINAL PATTERNa
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // ── CLIMB FINAL PATTERN ──────────────────────────────────────────
     private const float CLIMB_GHOST_SPEED_MULT   = 1f;
     private const float CLIMB_SWEEP_ACTIVE_SPEED = 70f;
     private const float CLIMB_SWEEP_MIN_FACTOR   = 1f;
@@ -1673,7 +1805,6 @@ internal class Abs : MonoBehaviour
         Vector3 toKnight  = (_knight.transform.position - centerFixedPos).normalized;
         float targetAngle = Mathf.Atan2(toKnight.y, toKnight.x) * Mathf.Rad2Deg;
         center.transform.rotation = Quaternion.Euler(0f, 0f, targetAngle);
-        yield return new WaitForSeconds(0.0f);
 
         while (_hm != null && _hm.hp > 0 && !finalDanceExtraAttackConfigured
                && _knight.transform.GetPositionY() <= 152f)
@@ -1703,10 +1834,8 @@ internal class Abs : MonoBehaviour
 
                 float remL = Mathf.Abs(Mathf.DeltaAngle(gAngL, targetAngle));
                 float remR = Mathf.Abs(Mathf.DeltaAngle(gAngR, targetAngle));
-                float sinL = Mathf.Clamp(Mathf.Sin(remL * Mathf.Deg2Rad), 0.01f, 1f);
-                float sinR = Mathf.Clamp(Mathf.Sin(remR * Mathf.Deg2Rad), 0.01f, 1f);
-                float factorL = Mathf.Clamp(1f / sinL, CLIMB_SWEEP_MIN_FACTOR, CLIMB_SWEEP_MAX_FACTOR);
-                float factorR = Mathf.Clamp(1f / sinR, CLIMB_SWEEP_MIN_FACTOR, CLIMB_SWEEP_MAX_FACTOR);
+                float factorL = Mathf.Clamp(1f / Mathf.Clamp(Mathf.Sin(remL * Mathf.Deg2Rad), 0.01f, 1f), CLIMB_SWEEP_MIN_FACTOR, CLIMB_SWEEP_MAX_FACTOR);
+                float factorR = Mathf.Clamp(1f / Mathf.Clamp(Mathf.Sin(remR * Mathf.Deg2Rad), 0.01f, 1f), CLIMB_SWEEP_MIN_FACTOR, CLIMB_SWEEP_MAX_FACTOR);
                 float stepL = ghostSweepSpeed * factorL * Time.deltaTime;
                 float stepR = ghostSweepSpeed * factorR * Time.deltaTime;
 
@@ -1746,15 +1875,11 @@ internal class Abs : MonoBehaviour
 
                 float remL = Mathf.Abs(Mathf.DeltaAngle(angL, targetAngle));
                 float remR = Mathf.Abs(Mathf.DeltaAngle(angR, targetAngle));
-                float sinL = Mathf.Clamp(Mathf.Sin(remL * Mathf.Deg2Rad), 0.01f, 1f);
-                float sinR = Mathf.Clamp(Mathf.Sin(remR * Mathf.Deg2Rad), 0.01f, 1f);
-                float factorL = Mathf.Clamp(1f / sinL, CLIMB_SWEEP_MIN_FACTOR, CLIMB_SWEEP_MAX_FACTOR);
-                float factorR = Mathf.Clamp(1f / sinR, CLIMB_SWEEP_MIN_FACTOR, CLIMB_SWEEP_MAX_FACTOR);
-                float stepL = CLIMB_SWEEP_ACTIVE_SPEED * factorL * Time.deltaTime;
-                float stepR = CLIMB_SWEEP_ACTIVE_SPEED * factorR * Time.deltaTime;
+                float factorL = Mathf.Clamp(1f / Mathf.Clamp(Mathf.Sin(remL * Mathf.Deg2Rad), 0.01f, 1f), CLIMB_SWEEP_MIN_FACTOR, CLIMB_SWEEP_MAX_FACTOR);
+                float factorR = Mathf.Clamp(1f / Mathf.Clamp(Mathf.Sin(remR * Mathf.Deg2Rad), 0.01f, 1f), CLIMB_SWEEP_MIN_FACTOR, CLIMB_SWEEP_MAX_FACTOR);
 
-                if (!doneL) angL = Mathf.MoveTowardsAngle(angL, targetAngle, stepR);
-                if (!doneR) angR = Mathf.MoveTowardsAngle(angR, targetAngle, stepL);
+                if (!doneL) angL = Mathf.MoveTowardsAngle(angL, targetAngle, CLIMB_SWEEP_ACTIVE_SPEED * factorL * Time.deltaTime);
+                if (!doneR) angR = Mathf.MoveTowardsAngle(angR, targetAngle, CLIMB_SWEEP_ACTIVE_SPEED * factorR * Time.deltaTime);
                 if (sweepL != null) { sweepL.transform.position = centerFixedPos; sweepL.transform.rotation = Quaternion.Euler(0f, 0f, angL); }
                 if (sweepR != null) { sweepR.transform.position = centerFixedPos; sweepR.transform.rotation = Quaternion.Euler(0f, 0f, angR); }
                 center.transform.position = centerFixedPos;
@@ -1868,21 +1993,18 @@ internal class Abs : MonoBehaviour
     private IEnumerator Arena2BeamBurstLoop()
     {
         yield return new WaitForSeconds(4f);
-        FsmEventTarget ebT = null;
-        try { ebT = _attackCommands.GetAction<SendEventByName>("EB 1", 9).eventTarget; } catch { yield break; }
-        if (ebT == null) yield break;
-        string[] sts = { "EB 1","EB 2","EB 3","EB 4","EB 5","EB 6","EB 7","EB 8","EB 9" };
-        foreach (var st in sts)
-        {
-            try
-            {
-                FsmutilExt.InsertAction(_attackCommands, st, new SendEventByName { eventTarget = ebT, sendEvent = "FIRE", delay = 0.35f, everyFrame = false }, 0);
-                FsmutilExt.InsertAction(_attackCommands, st, new SendEventByName { eventTarget = ebT, sendEvent = "FIRE", delay = 0.70f, everyFrame = false }, 0);
-                FsmutilExt.InsertAction(_attackCommands, st, new SendEventByName { eventTarget = ebT, sendEvent = "FIRE", delay = 1.05f, everyFrame = false }, 0);
-            }
-            catch { }
-        }
-        yield return null;
+
+        try { _attackCommands.GetAction<SendEventByName>("EB 1", 9).sendEvent = "END"; } catch {}
+        try { _attackCommands.GetAction<SendEventByName>("EB 4", 4).sendEvent = "END"; } catch {}
+        try { _attackCommands.GetAction<SendEventByName>("EB 7", 8).sendEvent = "END"; } catch {}
+        try { _attackCommands.GetAction<SendEventByName>("EB 2", 9).sendEvent = "FIRE"; } catch {}
+        try { _attackCommands.GetAction<SendEventByName>("EB 3", 9).sendEvent = "FIRE"; } catch {}
+        try { _attackCommands.GetAction<SendEventByName>("EB 5", 5).sendEvent = "FIRE"; } catch {}
+        try { _attackCommands.GetAction<SendEventByName>("EB 6", 5).sendEvent = "FIRE"; } catch {}
+        try { _attackCommands.GetAction<SendEventByName>("EB 8", 8).sendEvent = "FIRE"; } catch {}
+        try { _attackCommands.GetAction<SendEventByName>("EB 9", 8).sendEvent = "FIRE"; } catch {}
+
+        yield break;
     }
 
     private const float SWORD_SPEED_MULT = 5f;
@@ -1906,9 +2028,7 @@ internal class Abs : MonoBehaviour
         }
     }
 
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // COLOR DE ESCENA
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // ── COLOR DE ESCENA ──────────────────────────────────────────────
     private struct BgRenderers
     {
         public SpriteRenderer sky;
@@ -1974,11 +2094,11 @@ internal class Abs : MonoBehaviour
     {
         CollectBgRenderers();
         float elapsed = 0f;
-        Color fromSky    = _bgR.sky != null ? _bgR.sky.color : targetSky;
-        var fromPillars  = new List<Color>();
-        var fromHazes    = new List<Color>();
-        var fromClouds   = new List<Color>();
-        var fromRays     = new List<Color>();
+        Color fromSky   = _bgR.sky != null ? _bgR.sky.color : targetSky;
+        var fromPillars = new List<Color>();
+        var fromHazes   = new List<Color>();
+        var fromClouds  = new List<Color>();
+        var fromRays    = new List<Color>();
         foreach (var s in _bgR.pillars) fromPillars.Add(s != null ? s.color : targetPillar);
         foreach (var s in _bgR.hazes)   fromHazes.Add(s   != null ? s.color : targetHaze);
         foreach (var s in _bgR.clouds)  fromClouds.Add(s  != null ? s.color : targetCloud);
@@ -1990,7 +2110,7 @@ internal class Abs : MonoBehaviour
             float smooth = Mathf.Clamp01(elapsed / duration); smooth = smooth * smooth * (3f - 2f * smooth);
             try
             {
-                if (ENABLE_SKY_COLOR && _bgR.sky != null) _bgR.sky.color = Color.Lerp(fromSky, targetSky, smooth);
+                if (ENABLE_SKY_COLOR    && _bgR.sky != null) _bgR.sky.color = Color.Lerp(fromSky, targetSky, smooth);
                 if (ENABLE_PILLAR_COLOR) for (int i = 0; i < _bgR.pillars.Count; i++) if (_bgR.pillars[i] != null) _bgR.pillars[i].color = Color.Lerp(fromPillars[i], targetPillar, smooth);
                 if (ENABLE_HAZE_COLOR)   for (int i = 0; i < _bgR.hazes.Count;   i++) if (_bgR.hazes[i]   != null) { float a = _bgR.hazes[i].color.a;  _bgR.hazes[i].color  = Color.Lerp(new Color(fromHazes[i].r,  fromHazes[i].g,  fromHazes[i].b,  a), new Color(targetHaze.r,  targetHaze.g,  targetHaze.b,  a), smooth); }
                 if (ENABLE_CLOUD_COLOR)  for (int i = 0; i < _bgR.clouds.Count;  i++) if (_bgR.clouds[i]  != null) { float a = _bgR.clouds[i].color.a; _bgR.clouds[i].color = Color.Lerp(new Color(fromClouds[i].r, fromClouds[i].g, fromClouds[i].b, a), new Color(targetCloud.r, targetCloud.g, targetCloud.b, a), smooth); }
@@ -2010,9 +2130,6 @@ internal class Abs : MonoBehaviour
         catch { }
     }
 
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // OSCILACIÓN DEL HAZE EN FASE FINAL 
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     private IEnumerator FinalHazeOscillate()
     {
         if (!HAZE_OSC_ENABLED) yield break;
@@ -2042,6 +2159,110 @@ internal class Abs : MonoBehaviour
         }
     }
 
+
+    private IEnumerator FinalBgOscillate()
+    {
+        if (!FINAL_BG_OSC_ENABLED) yield break;
+        CollectBgRenderers();
+
+        // Colores "azul/morado" de partida = los P3 que ya están aplicados
+// Colores "azul/frío" configurables (desaturados respecto a P3)
+        Color skyA    = FINAL_BG_OSC_SKY_BLUE;
+        Color pillarA = FINAL_BG_OSC_PILLAR_BLUE;
+        Color hazeA   = FINAL_BG_OSC_HAZE_BLUE;
+        Color cloudA  = FINAL_BG_OSC_CLOUD_BLUE;
+        Color rayA    = FINAL_BG_OSC_RAY_BLUE;
+
+        // Colores "fuego" destino
+        Color skyB    = FINAL_BG_OSC_SKY_FIRE;
+        Color pillarB = FINAL_BG_OSC_PILLAR_FIRE;
+        Color hazeB   = FINAL_BG_OSC_HAZE_FIRE;
+        Color cloudB  = FINAL_BG_OSC_CLOUD_FIRE;
+        Color rayB    = FINAL_BG_OSC_RAY_FIRE;
+
+        bool towardFire = true;
+
+        while (true)
+        {
+            Color fromSky    = towardFire ? skyA    : skyB;
+            Color toSky      = towardFire ? skyB    : skyA;
+            Color fromPillar = towardFire ? pillarA : pillarB;
+            Color toPillar   = towardFire ? pillarB : pillarA;
+            Color fromHaze   = towardFire ? hazeA   : hazeB;
+            Color toHaze     = towardFire ? hazeB   : hazeA;
+            Color fromCloud  = towardFire ? cloudA  : cloudB;
+            Color toCloud    = towardFire ? cloudB  : cloudA;
+            Color fromRay    = towardFire ? rayA    : rayB;
+            Color toRay      = towardFire ? rayB    : rayA;
+
+            float elapsed = 0f;
+            while (elapsed < FINAL_BG_OSC_HALF_PERIOD)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / FINAL_BG_OSC_HALF_PERIOD);
+                float smooth = t * t * (3f - 2f * t);
+
+                try
+                {
+                    if (ENABLE_SKY_COLOR    && _bgR.sky != null)
+                        _bgR.sky.color = Color.Lerp(fromSky, toSky, smooth);
+
+                    if (ENABLE_PILLAR_COLOR)
+                        foreach (var s in _bgR.pillars)
+                            if (s != null) s.color = Color.Lerp(fromPillar, toPillar, smooth);
+
+                    if (ENABLE_HAZE_COLOR)
+                        foreach (var s in _bgR.hazes)
+                            if (s != null)
+                            {
+                                float a = s.color.a;
+                                s.color = Color.Lerp(
+                                    new Color(fromHaze.r, fromHaze.g, fromHaze.b, a),
+                                    new Color(toHaze.r,   toHaze.g,   toHaze.b,   a), smooth);
+                            }
+
+                    if (ENABLE_CLOUD_COLOR)
+                        foreach (var s in _bgR.clouds)
+                            if (s != null)
+                            {
+                                float a = s.color.a;
+                                s.color = Color.Lerp(
+                                    new Color(fromCloud.r, fromCloud.g, fromCloud.b, a),
+                                    new Color(toCloud.r,   toCloud.g,   toCloud.b,   a), smooth);
+                            }
+
+                    if (ENABLE_RAY_COLOR)
+                        foreach (var s in _bgR.rays)
+                            if (s != null) s.color = Color.Lerp(fromRay, toRay, smooth);
+                }
+                catch { }
+                yield return null;
+            }
+
+            // Fijar color de llegada exacto
+            try
+            {
+                Color curSky    = towardFire ? skyB    : skyA;
+                Color curPillar = towardFire ? pillarB : pillarA;
+                Color curHaze   = towardFire ? hazeB   : hazeA;
+                Color curCloud  = towardFire ? cloudB  : cloudA;
+                Color curRay    = towardFire ? rayB    : rayA;
+
+                if (ENABLE_SKY_COLOR    && _bgR.sky != null) _bgR.sky.color = curSky;
+                if (ENABLE_PILLAR_COLOR) foreach (var s in _bgR.pillars) if (s != null) s.color = curPillar;
+                if (ENABLE_HAZE_COLOR)   foreach (var s in _bgR.hazes)   if (s != null) s.color = new Color(curHaze.r,  curHaze.g,  curHaze.b,  s.color.a);
+                if (ENABLE_CLOUD_COLOR)  foreach (var s in _bgR.clouds)  if (s != null) s.color = new Color(curCloud.r, curCloud.g, curCloud.b, s.color.a);
+                if (ENABLE_RAY_COLOR)    foreach (var s in _bgR.rays)    if (s != null) s.color = curRay;
+            }
+            catch { }
+
+            // Pausa en el color de llegada
+            float hold = towardFire ? FINAL_BG_OSC_HOLD_FIRE : FINAL_BG_OSC_HOLD_BLUE;
+            if (hold > 0f) yield return new WaitForSeconds(hold);
+
+            towardFire = !towardFire;
+        }
+    }
 
     private IEnumerator FinalSwordVolley(bool fireLeft, bool fireRight)
     {
@@ -2084,7 +2305,6 @@ internal class Abs : MonoBehaviour
         foreach (var b in _activeFinalSwordBeams) { if (b != null) Object.Destroy(b); }
         _activeFinalSwordBeams.Clear();
         _finalSwordCoroutine = null;
-        Log("FinalSwordVolley | L=" + fireLeft + " R=" + fireRight + " spot=" + _lastTeleSpot);
     }
 
     private IEnumerator EnableFinalSwordAfterDelay()
@@ -2093,7 +2313,6 @@ internal class Abs : MonoBehaviour
         _finalSwordReady = true;
         Log("FinalSwordVolley: ready.");
     }
-
 
     private void ActivateGroundSpikesExcludingN(int n)
     {
@@ -2107,9 +2326,7 @@ internal class Abs : MonoBehaviour
         }
     }
 
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // HELPERS
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    // ── HELPERS ──────────────────────────────────────────────────────
     private IEnumerator DelayedConvo(string msg, float delay)
     { yield return new WaitForSeconds(delay); ShowConvo(msg); }
 
@@ -2132,13 +2349,14 @@ internal class Abs : MonoBehaviour
 
     private static void ConfigureAuraSpike(GameObject spike)
     {
-        var d = spike.GetComponent<DamageHero>(); if (d != null) { d.damageDealt = 1; d.hazardType = 0; }
+        var d = spike.GetComponent<DamageHero>();
+        if (d != null) { d.damageDealt = 1; d.hazardType = 0; d.shadowDashHazard = false; }
         var hs = spike.LocateMyFSM("Hero Saver"); if (hs != null) Object.Destroy(hs);
     }
 
     private static void Log(object o) => Modding.Logger.Log("[Aura Radiance] " + o);
 
-
+    // ── BOSS AFTERIMAGE ──────────────────────────────────────────────
     private const bool  BOSS_AFTERIMAGE_PHASE_SWORD_RAIN = false;
     private const bool  BOSS_AFTERIMAGE_PHASE_PLATFORMS  = true;
     private const bool  BOSS_AFTERIMAGE_PHASE_CLIMB      = true;
@@ -2151,29 +2369,22 @@ internal class Abs : MonoBehaviour
     private const float BOSS_AI_DECAY      = 1.35f;
     private const float BOSS_AI_INTERVAL   = 0.05f;
 
-    private AuraBossImagePool              _bossImagePool;
-    private AuraBossAfterimageGenerator    _bossAfterimage;
+    private AuraBossImagePool           _bossImagePool;
+    private AuraBossAfterimageGenerator _bossAfterimage;
 
     private void InitBossAfterimageSystem()
     {
-        var template = new GameObject("AuraBossAfterimageTemplate");
-        template.AddComponent<tk2dSprite>();
-        template.AddComponent<tk2dSpriteAnimator>();
-        Object.DontDestroyOnLoad(template);
-        template.SetActive(false);
-
         _bossImagePool = new AuraBossImagePool();
-        _bossImagePool.SetTemplate(template);
 
-        _bossAfterimage             = base.gameObject.AddComponent<AuraBossAfterimageGenerator>();
-        _bossAfterimage.pool        = _bossImagePool;
-        _bossAfterimage.red         = BOSS_AI_RED;
-        _bossAfterimage.green       = BOSS_AI_GREEN;
-        _bossAfterimage.blue        = BOSS_AI_BLUE;
+        _bossAfterimage              = base.gameObject.AddComponent<AuraBossAfterimageGenerator>();
+        _bossAfterimage.pool         = _bossImagePool;
+        _bossAfterimage.red          = BOSS_AI_RED;
+        _bossAfterimage.green        = BOSS_AI_GREEN;
+        _bossAfterimage.blue         = BOSS_AI_BLUE;
         _bossAfterimage.fullStrength = BOSS_AI_STRENGTH;
-        _bossAfterimage.decayTime   = BOSS_AI_DECAY;
-        _bossAfterimage.interval    = BOSS_AI_INTERVAL;
-        _bossAfterimage.enabled     = false;
+        _bossAfterimage.decayTime    = BOSS_AI_DECAY;
+        _bossAfterimage.interval     = BOSS_AI_INTERVAL;
+        _bossAfterimage.enabled      = false;
     }
 
     private void SetBossAfterimage(bool on)
@@ -2183,33 +2394,31 @@ internal class Abs : MonoBehaviour
 
     private IEnumerator TemporarilyLowerPlatformSpikes(float duration)
     {
-    var platGroups = new List<List<GameObject>>
-    {
-        _spikeGroup0, _spikeGroup1, _spikeGroup2, _spikeGroup3,
-        _spikeGroup5, _spikeGroup6, _spikeGroup7
-    };
+        var platGroups = new List<List<GameObject>>
+        {
+            _spikeGroup0, _spikeGroup1, _spikeGroup2, _spikeGroup3,
+            _spikeGroup5, _spikeGroup6, _spikeGroup7
+        };
 
-    foreach (var group in platGroups)
-        foreach (var go in group)
-            go?.LocateMyFSM("Control")?.SendEvent("DOWN");
-
-    float elapsed = 0f;
-    while (elapsed < duration)
-    {
         foreach (var group in platGroups)
             foreach (var go in group)
                 go?.LocateMyFSM("Control")?.SendEvent("DOWN");
 
-        yield return new WaitForSeconds(0.5f);
-        elapsed += 0.5f;
-    }
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            foreach (var group in platGroups)
+                foreach (var go in group)
+                    go?.LocateMyFSM("Control")?.SendEvent("DOWN");
+            yield return new WaitForSeconds(0.5f);
+            elapsed += 0.5f;
+        }
 
-    foreach (var group in platGroups)
-        foreach (var go in group)
-            go?.LocateMyFSM("Control")?.SendEvent("UP");
+        foreach (var group in platGroups)
+            foreach (var go in group)
+                go?.LocateMyFSM("Control")?.SendEvent("UP");
     }
-
-} 
+}
 
 
 internal class AuraAction : FsmStateAction
@@ -2251,9 +2460,7 @@ internal class AuraInfiniteDash : MonoBehaviour
             !self.cState.preventDash &&
             !self.cState.hazardDeath &&
             PlayerData.instance.GetBool("canDash"))
-        {
             return true;
-        }
         return false;
     }
 
@@ -2267,10 +2474,7 @@ internal class AuraInfiniteDash : MonoBehaviour
 
 internal class AuraBossImagePool
 {
-    private GameObject _template;
     private readonly List<GameObject> _inactive = new List<GameObject>();
-
-    public void SetTemplate(GameObject template) => _template = template;
 
     public GameObject Spawn(Vector3 position, Quaternion rotation, Vector3 scale)
     {
@@ -2283,8 +2487,9 @@ internal class AuraBossImagePool
         }
         else
         {
-            go = UnityEngine.Object.Instantiate(_template);
-            go.SetActive(true);
+            go = new GameObject("BossAfterimage");
+            go.AddComponent<tk2dSprite>();
+            go.AddComponent<tk2dSpriteAnimator>();
         }
         go.transform.position   = position;
         go.transform.rotation   = rotation;
@@ -2295,7 +2500,11 @@ internal class AuraBossImagePool
         return go;
     }
 
-    public void Return(GameObject go) => _inactive.Add(go);
+    public void Return(GameObject go)
+    {
+        go.SetActive(false);
+        _inactive.Add(go);
+    }
 }
 
 
@@ -2334,12 +2543,12 @@ internal class AuraBossAfterimageFrame : MonoBehaviour
 internal class AuraBossAfterimageGenerator : MonoBehaviour
 {
     public AuraBossImagePool pool;
-    public float red         = 1f;
-    public float green       = 0.3f;
-    public float blue        = 0.1f;
+    public float red          = 1f;
+    public float green        = 0.3f;
+    public float blue         = 0.1f;
     public float fullStrength = 0.55f;
-    public float decayTime   = 0.35f;
-    public float interval    = 0.05f;
+    public float decayTime    = 0.35f;
+    public float interval     = 0.05f;
 
     private float _timer;
 
@@ -2419,7 +2628,6 @@ internal class AuraHaloAnimator : MonoBehaviour
     public System.Collections.Generic.List<AuraHaloPhaseConfig> phases
         = new System.Collections.Generic.List<AuraHaloPhaseConfig>();
 
-
     public bool  beatEnabled   = true;
     public float beatMinScale  = 1.00f;
     public float beatMaxScale  = 1.12f;
@@ -2436,15 +2644,10 @@ internal class AuraHaloAnimator : MonoBehaviour
     private Vector3 _baseLocalPos = Vector3.zero;
     private SpriteRenderer _sr;
 
-
     private bool _clockMode = false;
-
-    /// <summary>true al terminar el 3er giro → dispara callback de color naranja</summary>
     public bool IsClockDone  { get; private set; } = true;
-    /// <summary>true al terminar el 4º giro → halo entra en modo beat (NO se oculta)</summary>
     public bool IsVanishDone { get; private set; } = true;
 
-    // ── Modo beat ────────────────────────────────────────────────────
     private bool  _beatMode  = false;
     private float _beatTimer = 0f;
 
@@ -2458,47 +2661,35 @@ internal class AuraHaloAnimator : MonoBehaviour
     {
         phases.Clear();
 
-        // Fase 0 — mínimo
         phases.Add(new AuraHaloPhaseConfig
         {
-            spinEnabled    = true,  spinSpeed        = -0.4f, spinAcceleration = 2f,
-            pulseEnabled   = false, pulseBaseScale   = 1f,
-            swingEnabled   = false,
-            bounceOnEnter  = false,
-            targetAlpha    = 0.1f,  alphaSmoothing   = 4f
+            spinEnabled = true, spinSpeed = -0.4f, spinAcceleration = 2f,
+            pulseEnabled = false, swingEnabled = false, bounceOnEnter = false,
+            targetAlpha = 0.1f, alphaSmoothing = 4f
         });
-
-        // Fase 1 — Sword Rain
         phases.Add(new AuraHaloPhaseConfig
         {
-            spinEnabled    = true,  spinSpeed        = -0.35f, spinAcceleration = 2f,
-            pulseEnabled   = true,  pulseBaseScale   = 1f,    pulseAmplitude   = 0.07f, pulseFrequency = 0.6f,
-            swingEnabled   = false,
-            bounceOnEnter  = true,  bouncePeakScale  = 1.15f, bounceDuration   = 0.18f,
-            targetAlpha    = 0.35f, alphaSmoothing   = 4f
+            spinEnabled = true, spinSpeed = -0.35f, spinAcceleration = 2f,
+            pulseEnabled = true, pulseBaseScale = 1f, pulseAmplitude = 0.07f, pulseFrequency = 0.6f,
+            swingEnabled = false,
+            bounceOnEnter = true, bouncePeakScale = 1.15f, bounceDuration = 0.18f,
+            targetAlpha = 0.35f, alphaSmoothing = 4f
         });
-
-        // Fase 2 — Plataformas / Climb
         phases.Add(new AuraHaloPhaseConfig
         {
-            spinEnabled    = true,  spinSpeed        = -2.0f, spinAcceleration = 5f,
-            spinJumpOnEnter = true,
-            pulseEnabled   = true,  pulseBaseScale   = 1f,    pulseAmplitude   = 0.18f, pulseFrequency = 1.8f,
-            swingEnabled   = true,  swingAmpY        = 0.18f, swingFreqY       = 1.4f,
-            bounceOnEnter  = true,  bouncePeakScale  = 1.25f, bounceDuration   = 0.18f,
-            targetAlpha    = 0.55f, alphaSmoothing   = 6f
+            spinEnabled = true, spinSpeed = -2.0f, spinAcceleration = 5f, spinJumpOnEnter = true,
+            pulseEnabled = true, pulseBaseScale = 1f, pulseAmplitude = 0.18f, pulseFrequency = 1.8f,
+            swingEnabled = true, swingAmpY = 0.18f, swingFreqY = 1.4f,
+            bounceOnEnter = true, bouncePeakScale = 1.25f, bounceDuration = 0.18f,
+            targetAlpha = 0.55f, alphaSmoothing = 6f
         });
-
-        // Fase 3 — Final
         phases.Add(new AuraHaloPhaseConfig
         {
-            spinEnabled    = true,  spinSpeed        = -5.5f, spinAcceleration = 9f,
-            spinJumpOnEnter = true,
-            pulseEnabled   = true,  pulseBaseScale   = 1f,    pulseAmplitude   = 0.38f, pulseFrequency  = 3.0f,
-            swingEnabled   = true,  swingAmpX        = 0.10f, swingAmpY        = 0.28f,
-                                    swingFreqX       = 2.5f,  swingFreqY       = 1.9f,
-            bounceOnEnter  = true,  bouncePeakScale  = 1.45f, bounceDuration   = 0.22f,
-            targetAlpha    = 0.80f, alphaSmoothing   = 8f
+            spinEnabled = true, spinSpeed = -5.5f, spinAcceleration = 9f, spinJumpOnEnter = true,
+            pulseEnabled = true, pulseBaseScale = 1f, pulseAmplitude = 0.38f, pulseFrequency = 3.0f,
+            swingEnabled = true, swingAmpX = 0.10f, swingAmpY = 0.28f, swingFreqX = 2.5f, swingFreqY = 1.9f,
+            bounceOnEnter = true, bouncePeakScale = 1.45f, bounceDuration = 0.22f,
+            targetAlpha = 0.80f, alphaSmoothing = 8f
         });
     }
 
@@ -2506,7 +2697,7 @@ internal class AuraHaloAnimator : MonoBehaviour
     {
         if (phase < 0 || phase >= phases.Count) return;
         _phase    = phase;
-        _beatMode = false; 
+        _beatMode = false;
         var cfg = phases[phase];
         if (cfg.spinJumpOnEnter) _spinCurrent += cfg.spinSpeed * 2.5f;
         if (cfg.bounceOnEnter)   TriggerBounce(cfg.bouncePeakScale, cfg.bounceDuration);
@@ -2522,11 +2713,6 @@ internal class AuraHaloAnimator : MonoBehaviour
 
     public void SpinImpulse(float amount = -5f) => _spinCurrent += amount;
 
-    public void SetSpinSpeed(float speed)
-    {
-        if (_phase < phases.Count) phases[_phase].spinSpeed = speed;
-    }
-
     public void StartClockAnimation(float quarterTime)
     {
         if (!IsClockDone || !IsVanishDone) return;
@@ -2541,7 +2727,7 @@ internal class AuraHaloAnimator : MonoBehaviour
         _beatMode    = false;
 
         float baseScale = _phase < phases.Count ? phases[_phase].pulseBaseScale : 1f;
-        _scaleCurrent = baseScale;
+        _scaleCurrent          = baseScale;
         transform.localScale   = new Vector3(baseScale, baseScale, 1f);
         transform.localPosition = _baseLocalPos;
 
@@ -2557,37 +2743,24 @@ internal class AuraHaloAnimator : MonoBehaviour
             {
                 elapsed += Time.deltaTime;
                 float t     = Mathf.Clamp01(elapsed / quarterTime);
-                float eased = ClockEase(t);
-                float angle = Mathf.LerpAngle(fromAngle, toAngle, eased);
+                float angle = Mathf.LerpAngle(fromAngle, toAngle, ClockEase(t));
                 transform.eulerAngles = new Vector3(0f, 0f, angle);
                 yield return null;
             }
             transform.eulerAngles = new Vector3(0f, 0f, toAngle);
             yield return new WaitForSeconds(0.04f);
 
-
-            if (q == 3)
-                IsClockDone = true;
+            if (q == 3) IsClockDone = true;
         }
-
 
         _clockMode = false;
 
         if (beatEnabled)
         {
-
             if (_sr != null && _phase < phases.Count)
-            {
-                var c = _sr.color;
-                c.a = phases[_phase].targetAlpha;
-                _sr.color = c;
-            }
+            { var c = _sr.color; c.a = phases[_phase].targetAlpha; _sr.color = c; }
             _beatMode  = true;
             _beatTimer = 0f;
-        }
-        else
-        {
-
         }
 
         IsVanishDone = true;
@@ -2595,18 +2768,10 @@ internal class AuraHaloAnimator : MonoBehaviour
 
     private static float ClockEase(float t)
     {
-        if (t < 0.18f)
-        {
-            float norm = t / 0.18f;
-            return norm * norm * 0.12f;
-        }
-        if (t < 0.78f)
-        {
-            return 0.12f + (t - 0.18f) / 0.60f * 0.78f;
-        }
-        float bt  = (t - 0.78f) / 0.22f;
-        float ov  = Mathf.Sin(bt * Mathf.PI) * 0.10f;
-        return 0.90f + bt * 0.10f + ov * (1f - bt);
+        if (t < 0.18f) { float norm = t / 0.18f; return norm * norm * 0.12f; }
+        if (t < 0.78f) return 0.12f + (t - 0.18f) / 0.60f * 0.78f;
+        float bt = (t - 0.78f) / 0.22f;
+        return 0.90f + bt * 0.10f + Mathf.Sin(bt * Mathf.PI) * 0.10f * (1f - bt);
     }
 
     private void FixedUpdate()
@@ -2617,7 +2782,6 @@ internal class AuraHaloAnimator : MonoBehaviour
         float dt = Time.deltaTime;
         _swingTimer += dt;
 
-
         float targetSpin = cfg.spinEnabled ? cfg.spinSpeed : 0f;
         _spinCurrent += (targetSpin - _spinCurrent) * dt * cfg.spinAcceleration;
         if (Mathf.Abs(_spinCurrent) > 0.001f)
@@ -2626,41 +2790,28 @@ internal class AuraHaloAnimator : MonoBehaviour
         if (_beatMode)
         {
             _beatTimer += dt;
-            float sine = Mathf.Sin(_beatTimer * beatFrequency * Mathf.PI * 2f) * 0.5f + 0.5f; // 0→1
-            float beatScale = Mathf.Lerp(beatMinScale, beatMaxScale, sine);
-            transform.localScale    = new Vector3(beatScale, beatScale, 1f);
-            transform.localPosition = _baseLocalPos; 
-
-            if (_sr != null)
-            {
-                Color c = _sr.color;
-                c.a = Mathf.Lerp(c.a, cfg.targetAlpha, dt * cfg.alphaSmoothing);
-                _sr.color = c;
-            }
-            return; 
+            float sine = Mathf.Sin(_beatTimer * beatFrequency * Mathf.PI * 2f) * 0.5f + 0.5f;
+            transform.localScale    = new Vector3(Mathf.Lerp(beatMinScale, beatMaxScale, sine), Mathf.Lerp(beatMinScale, beatMaxScale, sine), 1f);
+            transform.localPosition = _baseLocalPos;
+            if (_sr != null) { Color c = _sr.color; c.a = Mathf.Lerp(c.a, cfg.targetAlpha, dt * cfg.alphaSmoothing); _sr.color = c; }
+            return;
         }
-
 
         float targetScale = cfg.pulseBaseScale;
         if (cfg.pulseEnabled)
-        {
-            float sine2 = Mathf.Sin(_swingTimer * cfg.pulseFrequency * Mathf.PI * 2f);
-            targetScale = cfg.pulseBaseScale + sine2 * cfg.pulseAmplitude;
-        }
+            targetScale = cfg.pulseBaseScale + Mathf.Sin(_swingTimer * cfg.pulseFrequency * Mathf.PI * 2f) * cfg.pulseAmplitude;
 
         if (_inBounce)
         {
             _bounceTimer -= dt;
             float bt = Mathf.Clamp01(1f - _bounceTimer / Mathf.Max(_bounceDuration, 0.001f));
-            float bounceOffset = Mathf.Sin(bt * Mathf.PI) * (_bouncePeak - cfg.pulseBaseScale);
-            targetScale = cfg.pulseBaseScale + bounceOffset;
+            targetScale = cfg.pulseBaseScale + Mathf.Sin(bt * Mathf.PI) * (_bouncePeak - cfg.pulseBaseScale);
             if (_bounceTimer <= 0f) _inBounce = false;
         }
 
         _scaleCurrent += (targetScale - _scaleCurrent) * dt * cfg.pulseSmoothing;
         transform.localScale = new Vector3(_scaleCurrent, _scaleCurrent, 1f);
 
-        // ── Swing ──────────────────────────────────────────────────────
         Vector3 swingOffset = Vector3.zero;
         if (cfg.swingEnabled)
         {
@@ -2669,13 +2820,7 @@ internal class AuraHaloAnimator : MonoBehaviour
         }
         transform.localPosition = _baseLocalPos + swingOffset;
 
-        // ── Alpha ──────────────────────────────────────────────────────
-        if (_sr != null)
-        {
-            Color c = _sr.color;
-            c.a = Mathf.Lerp(c.a, cfg.targetAlpha, dt * cfg.alphaSmoothing);
-            _sr.color = c;
-        }
+        if (_sr != null) { Color c = _sr.color; c.a = Mathf.Lerp(c.a, cfg.targetAlpha, dt * cfg.alphaSmoothing); _sr.color = c; }
     }
 }
 
@@ -2693,22 +2838,18 @@ internal class AuraHaloSimpleRotator : MonoBehaviour
     public System.Collections.Generic.List<AuraHaloSimpleRotatorPhase> phases
         = new System.Collections.Generic.List<AuraHaloSimpleRotatorPhase>();
 
-    private int   _phase = 0;
+    private int            _phase = 0;
     private SpriteRenderer _sr;
 
-    private void Awake()
-    {
-        _sr = GetComponent<SpriteRenderer>();
-    }
+    private void Awake() { _sr = GetComponent<SpriteRenderer>(); }
 
     public void BuildDefaultPhases()
     {
         phases.Clear();
-
-        phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed =  0.3f, targetAlpha = 0.08f, alphaSmoothing = 3f }); // 0
-        phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed =  0.8f, targetAlpha = 0.30f, alphaSmoothing = 4f }); // 1 Sword Rain
-        phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed =  2.2f, targetAlpha = 0.50f, alphaSmoothing = 5f }); // 2 Plat/Climb
-        phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed =  5.0f, targetAlpha = 0.75f, alphaSmoothing = 7f }); // 3 Final
+        phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed =  0.3f, targetAlpha = 0.08f, alphaSmoothing = 3f });
+        phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed =  0.8f, targetAlpha = 0.30f, alphaSmoothing = 4f });
+        phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed =  2.2f, targetAlpha = 0.50f, alphaSmoothing = 5f });
+        phases.Add(new AuraHaloSimpleRotatorPhase { spinSpeed =  5.0f, targetAlpha = 0.75f, alphaSmoothing = 7f });
     }
 
     public void SetPhase(int phase)
@@ -2721,14 +2862,7 @@ internal class AuraHaloSimpleRotator : MonoBehaviour
     {
         if (_phase < 0 || _phase >= phases.Count) return;
         var cfg = phases[_phase];
-
         transform.eulerAngles += new Vector3(0f, 0f, cfg.spinSpeed);
-
-        if (_sr != null)
-        {
-            Color c = _sr.color;
-            c.a = Mathf.Lerp(c.a, cfg.targetAlpha, Time.deltaTime * cfg.alphaSmoothing);
-            _sr.color = c;
-        }
+        if (_sr != null) { Color c = _sr.color; c.a = Mathf.Lerp(c.a, cfg.targetAlpha, Time.deltaTime * cfg.alphaSmoothing); _sr.color = c; }
     }
 }
